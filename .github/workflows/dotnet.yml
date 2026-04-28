@@ -4,9 +4,12 @@
 name: .NET
 
 on:
-  push:
+ schedule:
+    # 定期実行する時間・・・①
+    - cron: 15 * * * * echo 'hello'
+ push:
     branches: [ "master" ]
-  pull_request:
+ pull_request:
     branches: [ "master" ]
 
 jobs:
