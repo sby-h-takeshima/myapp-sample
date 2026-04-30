@@ -1,29 +1,24 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: dotnet
+name: "dataUpdate"
 
 on:
-  workflow_dispatch:
-
   schedule:
-    - cron:  "48 * * * *"
+    - cron: '40 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    environment: update
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set current datetime as env variable
-        env:
-          TZ: 'Asia/Tokyo' 
-        run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
-
-      - name: Commit
-        run: |
-          echo -e ${{ env.CURRENT_DATETIME }} >> commit_log.txt
-          git add commit_log.txt
-          git commit -m "[add] 自動コミット:${{ env.CURRENT_DATETIME }}"
-          git push origin main
+    - uses: actions/checkout@v2
+    - name: Update Data
+      run: sh ./script/update.sh
+    - name: setting git
+      run: |
+        git config --local user.email ${{ secrets.GIT_EMAIL }}
+        git config --local user.name "sby-h-takeshima"
+        git add .
+        git commit -m "update current_data $(date '+%Y%m%d')"
+        git push origin master
