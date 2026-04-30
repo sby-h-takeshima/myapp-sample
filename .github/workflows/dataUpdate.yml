@@ -5,20 +5,25 @@ name: "dataUpdate"
 
 on:
   schedule:
-    - cron: '13 * * * *'
+    - cron: '27 * * * *' # ñàéû13ï™Ç…é¿çs
 
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: update
     steps:
-    - uses: actions/checkout@v2
-    - name: Update Data
-      run: sh ./script/update.sh
-    - name: setting git
-      run: |
-        git config --local user.email ${{ secrets.GIT_EMAIL }}
-        git config --local user.name "sby-h-takeshima"
-        git add .
-        git commit -m "update current_data $(date '+%Y%m%d')"
-        git push origin master
+      - uses: actions/checkout@v2
+
+      - name: Update Data
+        run: sh ./script/update.sh
+
+      - name: Set up Git
+        run: |
+          git config --local user.email "${{ secrets.GIT_EMAIL }}"
+          git config --local user.name "sby-h-takeshima"
+
+      - name: Commit & Push changes
+        run: |
+          git add .
+          git diff --cached --quiet || git commit -m "Automated update $(date '+%Y%m%d%H%M')"
+          git push origin master
