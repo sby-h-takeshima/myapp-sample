@@ -5,7 +5,7 @@ name: Auto Commit and Push
 
 on:
   schedule:
-    - cron: '48 * * * *' # 毎日0時（UTC）に実行
+    - cron: '50 * * * *' # 毎日0時（UTC）に実行
   workflow_dispatch: # 手動実行も可能
 
 jobs:
@@ -23,8 +23,8 @@ jobs:
 
       - name: Commit and Push
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "h-takeshima@shibuyakogyoITS.onmicrosoft.com"
+          git config --local user.name "sby-h-takeshima"
           git add -A
           git diff-index --quiet HEAD || git commit -m "Auto-update file"
           git push
