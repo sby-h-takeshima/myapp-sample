@@ -1,29 +1,30 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: "dataUpdate"
+name: Auto Commit and Push
 
 on:
   schedule:
-    - cron: '27 * * * *' # 毎時13分に実行
+    - cron: '48 * * * *' # 毎日0時（UTC）に実行
+  workflow_dispatch: # 手動実行も可能
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: update
+    permissions:
+      contents: write # プッシュ権限を付与
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Update Data
-        run: sh ./script/update.sh
-
-      - name: Set up Git
+      - name: Make changes
         run: |
-          git config --local user.email "${{ secrets.GIT_EMAIL }}"
-          git config --local user.name "sby-h-takeshima"
+          echo "Updated on $(date)" > update.txt
 
-      - name: Commit & Push changes
+      - name: Commit and Push
         run: |
-          git add .
-          git diff --cached --quiet || git commit -m "Automated update $(date '+%Y%m%d%H%M')"
-          git push origin master
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Auto-update file"
+          git push
