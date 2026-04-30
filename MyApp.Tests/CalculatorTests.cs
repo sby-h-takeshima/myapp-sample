@@ -19,6 +19,6 @@ public class CalculatorTests
     public void Subtract_ReturnsCorrectDifference()
     {
         var calc = new Calculator();
-        Assert.Equal(1, calc.Subtract(4, 3));
+        Assert.Equal(1, calc.Subtract(3, 2));
     }
 }

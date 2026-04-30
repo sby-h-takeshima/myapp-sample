@@ -5,7 +5,7 @@ name: Auto Commit and Push
 
 on:
   schedule:
-    - cron: '50 * * * *' # 毎日0時（UTC）に実行
+    - cron: '52 * * * *' # 毎日0時（UTC）に実行
   workflow_dispatch: # 手動実行も可能
 
 jobs:
